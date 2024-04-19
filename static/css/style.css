@@ -1,0 +1,34 @@
+.col-md-6 {
+    flex: 0 0 auto;
+}
+
+.col-xl-3 {
+    flex: 0 0 auto;
+}
+
+.margin_text {
+    margin-left: 5em;
+    margin-right: 2em;
+}
+
+
+.margin_button {
+    margin: 1.5em;
+}
+
+.margin_menu {
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+.margin_h1 {
+    margin-bottom: 1em;
+}
+
+.text-margin {
+    margin: 1.5em;
+}
+
+.margin_button-top {
+    margin-top: 0.5em;
+}

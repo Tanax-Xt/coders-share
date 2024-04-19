@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <h1>Новый проект</h1>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(class="form-control") }}<br>
+            {% for error in form.name.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.about.label }}<br>
+            {{ form.about(class="form-control") }}<br>
+            {% for error in form.about.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.banner.label }}<br>
+{#            Для лучшего отображения баннер должен быть квадратным<br>#}
+            {{ form.banner(type='file', accept='image/jpeg,image/png') }}<br>
+            {% for error in form.banner.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.language.label }}<br>
+            {{ form.language(class="form-control") }}<br>
+            {% for error in form.language.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.files.label }}<br>
+            {{ form.files(type='file', accept='application/zip') }}<br>
+            {% for error in form.files.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.price.label }}<br>
+            {{ form.price(class="form-control") }}<br>
+            {% for error in form.price.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+        <div class="custom-control custom-checkbox">
+            <p>{{ form.accept_lang(type="checkbox", class="custom-control-input") }} {{ form.accept_lang.label(class="custom-control-label") }}</p>
+        </div>
+        <div class="custom-control custom-checkbox">
+            <p>{{ form.accept_file(type="checkbox", class="custom-control-input") }} {{ form.accept_file.label(class="custom-control-label") }}</p>
+        </div>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        {{ message }}
+    </form>
+{% endblock %}

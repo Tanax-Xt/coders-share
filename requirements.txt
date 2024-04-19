@@ -1,0 +1,12 @@
+Flask==3.0.3
+SQLAlchemy==2.0.29
+SQLAlchemy-serializer==1.4.12
+pytz==2024.1
+requests==2.31.0
+Flask-RESTful==0.3.10
+alembic==1.13.1
+python-dotenv==1.0.1
+Flask-WTF==1.2.1
+flask_login
+sqlalchemy_file
+flask_uploads

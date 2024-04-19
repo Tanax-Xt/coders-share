@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="proj-menu">
+        <ul class="nav nav-pills">
+            <li class="nav-item"><h1>Проекты и шаблоны</h1></li>
+            {% if current_user.is_authenticated %}
+                <li class="nav-item ml-md-auto">
+                    <a href='/projects/add' class="not_active">
+                        <button type="button" class="btn btn-outline-danger">Загрузить свой проект</button>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    <ul class="nav nav-pills margin_menu">
+        <li class="nav-item">
+            <a class="nav-link {% if request.args.get('lang') == None %} active{% endif %}"
+               href="?">Все языки</a>
+        </li>
+        {% for language in languages %}
+            <a class="nav-link {% if request.args.get('lang') == language.language_sign %} active {% endif %}"
+               href="?lang={{ language.language_sign }}">{{ language.language_title }}</a>
+        {% endfor %}
+    </ul>
+    <div class="row">
+        {#        <div class="card-deck">#}
+        {% for project in projects %}
+            {% if request.args.get('lang') != None %}
+                {% if project.language.language_sign == request.args.get('lang') %}
+                    {#                        <div class="col-md-6 col-xl-3">#}
+                    <div class="card col-md-6 col-xl-3">
+                        <img class="card-img-top" src="{{ project.banner }}" alt="Card image">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ project.title }}</h4>
+                            <span class="badge badge-primary">{{ project.language.language_title }}</span>
+                            <p class="card-text">{{ project.about }}</p>
+                            <p class="badge badge-light">Цена: {{ project.price }} рублей</p><br>
+                            {% if current_user.is_authenticated %}
+                            {% if project in current_user.bought_projects %}
+                                <a href="/uploads/{{ project.user.id }}/{{ project.id }}/files.zip"
+                                   class="btn btn-success">Скачать</a>
+                            {% elif current_user == project.user %}
+                                <a href="/uploads/{{ project.user.id }}/{{ project.id }}/files.zip"
+                                   class="btn btn-success">Скачать</a>
+                                <a href="/projects_delete/{{ project.id }}"
+                                   class="btn btn-danger ml-md-auto">Удалить</a>
+                            {% elif project in basket.projects %}
+                                <a href="/basket" class="btn btn-secondary">В корзине</a>
+                            {% else %}
+                                <a href="/basket/{{ project.id }}" class="btn btn-primary">В корзину</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="/login" class="btn btn-primary">Требуется авторизация</a>
+                        {% endif %}
+                        </div>
+                    </div>
+                    {#                        </div>#}
+                {% endif %}
+            {% else %}
+                {#                                        <div class="col-md-6 col-xl-3">#}
+                <div class="card col-md-6 col-xl-3">
+                    <img class="card-img-top" src="{{ project.banner }}" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ project.title }}</h4>
+                        <span class="badge badge-primary">{{ project.language.language_title }}</span>
+                        <p class="card-text">{{ project.about }}</p>
+                        <p class="badge badge-light">Цена: {{ project.price }} рублей</p><br>
+                        {% if current_user.is_authenticated %}
+                            {% if project in current_user.bought_projects %}
+                                <a href="/uploads/{{ project.user.id }}/{{ project.id }}/files.zip"
+                                   class="btn btn-success">Скачать</a>
+                            {% elif current_user == project.user %}
+                                <a href="/uploads/{{ project.user.id }}/{{ project.id }}/files.zip"
+                                   class="btn btn-success">Скачать</a>
+                                <a href="/projects_delete/{{ project.id }}"
+                                   class="btn btn-danger ml-md-auto">Удалить</a>
+                            {% elif project in basket.projects %}
+                                <a href="/basket" class="btn btn-secondary">В корзине</a>
+                            {% else %}
+                                <a href="/basket/{{ project.id }}" class="btn btn-primary">В корзину</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="/login" class="btn btn-primary">Требуется авторизация</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {#                                        </div>#}
+            {% endif %}
+        {% endfor %}
+    </div>
+    {#    </div>#}
+
+{% endblock %}
