@@ -298,7 +298,8 @@ def register():
         db_sess.add(basket)
         db_sess.merge(user)
         db_sess.commit()
-        return redirect('/login')
+        login_user(user, remember=False)
+        return redirect(url_for('projects'))
     return render_template('register.html', form=form)
 
 
