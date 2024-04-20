@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <br>
+    <h1>Страница для разработчиков</h1>
+    <h3>Получите API-ключ здесь</h3>
+
+    <form action="" method="post">
+        <p>{{ form.submit(type="submit", class="btn btn-primary margin_button-top") }}</p>
+    </form>
+    {% if api_key != None %}
+        <p>Ваш API-ключ: {{ api_key }}</p>
+    {% endif %}
+    <br>
+{% endblock %}

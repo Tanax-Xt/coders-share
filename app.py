@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, make_response, jsonify, render_template, redirect, url_for, send_from_directory
 from flask_login import login_user, LoginManager, current_user, login_required, logout_user
 from flask_restful import Api, abort
+from api.generate_api_key import get_api_key
 
 from api import languages_resource
 from data import db_session
@@ -12,6 +13,7 @@ from data.languages import Language
 from data.projects import Project
 from data.users import User
 from forms.cardform import CardForm
+from forms.developerform import DeveloperForm
 from forms.loginform import LoginForm
 from forms.newprojectform import NewProjectForm
 from forms.registerform import RegisterForm
@@ -26,6 +28,17 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 
+
+@app.route('/developer', methods=['GET', 'POST'])
+@login_required
+def developer():
+    form = DeveloperForm()
+    if form.is_submitted():
+        api_key = get_api_key()
+        return render_template('developer.html', form=form, api_key=api_key)
+    return render_template('developer.html', form=form)
+
+
 @app.route('/account/withdrawal', methods=['GET', 'POST'])
 @login_required
 def account_withdrawal():
@@ -37,7 +50,6 @@ def account_withdrawal():
         db_sess.commit()
         return redirect(url_for('account'))
     return render_template('withdrawal.html', form=form)
-
 
 
 @app.route('/account/replenishment', methods=['GET', 'POST'])

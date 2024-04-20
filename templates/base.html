@@ -17,28 +17,21 @@
             <img src="/static/image/icon/logo_alpha.svg" width="30" height="30" class="d-inline-block align-top" alt="">
             Coders Share
         </a>
-{#        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">#}
             <div class="navbar-nav ml-md-auto">
                 <a class="nav-item nav-link active" href="/projects">Шаблоны и проекты</a>
             </div>
-            {#        </div>#}
             {% if current_user.is_authenticated %}
-                {#            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">#}
                 <div class="navbar-nav ml-auto">
                     <a href="/basket"><button type="button" class="btn btn-outline-light">Корзина</button></a>
                     <a class="nav-item nav-link active margin_text" href="/account">{{ current_user.name }}</a>
                     <a class="nav-item nav-link" href="/logout">Выйти</a>
                 </div>
-                {#            </div>#}
             {% else %}
-                {#            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">#}
                 <div class="navbar-nav ml-auto">
                     <a class="nav-item nav-link" href="/login">Войти</a>
                     <a class="nav-item nav-link active" href="/register">Зарегистрироваться</a>
                 </div>
-                {#            </div>#}
             {% endif %}
-{#        </div>#}
     </nav>
 </header>
 
@@ -48,6 +41,9 @@
 <footer>
     <nav class="navbar navbar-light bg-light">
         <span>© 2024 Coders Share. Все права защищены.</span>
+        <div class="navbar-nav offset-md-3">
+            <a href="/developer" class="nav-item nav-link">Generate API-key</a>
+        </div>
         <a href="https://github.com/Tanax-Xt/coders-share">Project's GitHub</a>
     </nav>
 </footer>
