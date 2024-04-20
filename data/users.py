@@ -18,11 +18,11 @@ class User(SqlAlchemyBase, SerializerMixin, UserMixin):
     name = sqlalchemy.Column(sqlalchemy.String)
     added_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
+    money = sqlalchemy.Column(sqlalchemy.Integer, default=0)
 
     projects = orm.relationship("Project", back_populates='user')
 
     basket = orm.relationship('Basket')
-    # basket = orm.relationship("Basket", back_populates='user')
 
     bought_projects = orm.relationship("Project",
                                        secondary="bought_projects_to_user",
@@ -33,5 +33,3 @@ class User(SqlAlchemyBase, SerializerMixin, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
-
-# добавить привязку всех проектов пользователя

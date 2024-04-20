@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    {% set sum = basket.projects | sum(attribute='price') %}
+    <br>
+    <div>
+        <h1>Оплата покупки</h1>
+        <h3 class="text-margin">Сумма к оплате: {{ sum }} рублей</h3>
+    </div>
+    <ul class="nav nav-tabs margin_menu">
+        {% if sum <= current_user.money %}
+            <li class="nav-item">
+                <a class="nav-link {% if request.args.get('payment') == None %}active{% endif %}" href="?">Оплата по
+                    карте</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.args.get('payment') == 'account' %}active{% endif %}"
+                   href="?payment=account">Оплата со счета аккаунта</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link active" href="?">Оплата по
+                    карте</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled"
+                   href="?payment=account">Оплата со счета аккаунта (недостаточно средств)</a>
+            </li>
+        {% endif %}
+    </ul>
+    {% if request.args.get('payment') == None %}
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.num.label }}<br>
+                {{ form.num(class="form-control") }}<br>
+                {% for error in form.num.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+            </div>
+        <h5>Срок действия:</h5>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    {{ form.month.label }}<br>
+                    {{ form.month(class="form-control") }}<br>
+                    {% for error in form.month.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+                <div class="form-group col-md-2">
+                    {{ form.year.label }}<br>
+                    {{ form.year(class="form-control") }}<br>
+                    {% for error in form.year.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+                <div class="form-group col-md-2 ml-auto">
+                    {{ form.cvv.label }}<br>
+                    {{ form.cvv(class="form-control") }}<br>
+                    {% for error in form.cvv.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        </form>
+    {% else %}
+        <a href="/basket/buy/complete">
+            <button type="button" class="btn btn-outline-success margin_button-without-top">Оплатить со счета</button>
+        </a>
+    {% endif %}
+    <br>
+{% endblock %}

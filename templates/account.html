@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <br>
+    <h1>Ваш аккаунт, {{ current_user.name }}</h1>
+    <ul class="nav nav-tabs margin_menu">
+        <li class="nav-item">
+            <a class="nav-link {% if request.args.get('projects') == None %}active{% endif %}" href="?">Личные
+                данные</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.args.get('projects') == 'owner' %}active{% endif %}"
+               href="?projects=owner">Ваши проекты</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.args.get('projects') == 'buyer' %}active{% endif %}"
+               href="?projects=buyer">Приобретенные проекты</a>
+        </li>
+    </ul>
+    {% if request.args.get('projects') == None %}
+        <div>
+            <h3>Баланс: {{ current_user.money }} рублей</h3>
+            <div>
+                <a href="/account/withdrawal"><button type="button" class="btn btn-outline-danger">Вывести</button></a>
+                <a href="/account/replenishment">
+                    <button type="button" class="btn btn-success margin_button">Пополнить</button>
+                </a>
+
+            </div>
+        </div>
+    {% elif request.args.get('projects') == 'owner' %}
+        <div class="row">
+            {% for project in owner_projects %}
+                <div class="card col-md-6 col-xl-3">
+                    <img class="card-img-top" src="{{ project.banner }}" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ project.title }}</h4>
+                        <span class="badge badge-primary">{{ project.language.language_title }}</span>
+                        <p class="card-text">{{ project.about }}</p>
+                        <p class="badge badge-light">Цена: {{ project.price }} рублей</p><br>
+                        <a href="/uploads/{{ project.user.id }}/{{ project.id }}/files.zip"
+                           class="btn btn-success">Скачать</a>
+                        <a href="/projects_delete/{{ project.id }}"
+                           class="btn btn-danger ml-md-auto">Удалить</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row">
+            {% for project in current_user.bought_projects %}
+                <div class="card col-md-6 col-xl-3">
+                    <img class="card-img-top" src="{{ project.banner }}" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ project.title }}</h4>
+                        <span class="badge badge-primary">{{ project.language.language_title }}</span>
+                        <p class="card-text">{{ project.about }}</p>
+                        <p class="badge badge-light">Цена: {{ project.price }} рублей</p><br>
+                        <a href="/uploads/{{ project.user.id }}/{{ project.id }}/files.zip"
+                           class="btn btn-success">Скачать</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <br>
+{% endblock %}

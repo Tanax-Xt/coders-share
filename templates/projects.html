@@ -25,11 +25,9 @@
         {% endfor %}
     </ul>
     <div class="row">
-        {#        <div class="card-deck">#}
         {% for project in projects %}
             {% if request.args.get('lang') != None %}
                 {% if project.language.language_sign == request.args.get('lang') %}
-                    {#                        <div class="col-md-6 col-xl-3">#}
                     <div class="card col-md-6 col-xl-3">
                         <img class="card-img-top" src="{{ project.banner }}" alt="Card image">
                         <div class="card-body">
@@ -56,10 +54,8 @@
                         {% endif %}
                         </div>
                     </div>
-                    {#                        </div>#}
                 {% endif %}
             {% else %}
-                {#                                        <div class="col-md-6 col-xl-3">#}
                 <div class="card col-md-6 col-xl-3">
                     <img class="card-img-top" src="{{ project.banner }}" alt="Card image">
                     <div class="card-body">
@@ -86,10 +82,8 @@
                         {% endif %}
                     </div>
                 </div>
-                {#                                        </div>#}
             {% endif %}
         {% endfor %}
     </div>
-    {#    </div>#}
 
 {% endblock %}

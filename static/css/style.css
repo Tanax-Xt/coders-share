@@ -32,3 +32,16 @@
 .margin_button-top {
     margin-top: 0.5em;
 }
+
+.margin_button-without-left {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    margin-right: 1.5em;
+}
+
+
+.margin_button-without-top {
+    margin-left: 1.5em;
+    margin-bottom: 1.5em;
+    margin-right: 1.5em;
+}

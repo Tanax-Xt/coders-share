@@ -11,9 +11,12 @@ from data.basket import Basket
 from data.languages import Language
 from data.projects import Project
 from data.users import User
+from forms.cardform import CardForm
 from forms.loginform import LoginForm
 from forms.newprojectform import NewProjectForm
 from forms.registerform import RegisterForm
+from forms.replenishmentform import ReplenishmentForm
+from forms.withdrawalform import WithdrawalForm
 
 load_dotenv()
 
@@ -22,6 +25,78 @@ api = Api(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 login_manager = LoginManager(app)
 login_manager.init_app(app)
+
+@app.route('/account/withdrawal', methods=['GET', 'POST'])
+@login_required
+def account_withdrawal():
+    form = WithdrawalForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == current_user.id).first()
+        user.money = 0
+        db_sess.commit()
+        return redirect(url_for('account'))
+    return render_template('withdrawal.html', form=form)
+
+
+
+@app.route('/account/replenishment', methods=['GET', 'POST'])
+@login_required
+def account_replenishment():
+    form = ReplenishmentForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == current_user.id).first()
+        user.money += form.sum.data
+        db_sess.commit()
+        return redirect(url_for('account'))
+    return render_template('replenishment.html', form=form)
+
+
+@app.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    try:
+        db_sess = db_session.create_session()
+        owner_projects = db_sess.query(Project).filter(Project.user == current_user).all()
+        return render_template('account.html', owner_projects=owner_projects)
+    except Exception:
+        return redirect(url_for('account'))
+
+
+@app.route('/basket/buy/complete')
+@login_required
+def basket_complete(from_card=False):
+    try:
+        db_sess = db_session.create_session()
+        basket = db_sess.query(Basket).filter(Basket.user_id == current_user.id).first()
+        user = db_sess.query(User).filter(User.id == current_user.id).first()
+        sm = 0
+        for proj in basket.projects:
+            user.bought_projects.append(proj)
+            basket.projects.remove(proj)
+            sm += proj.price
+        db_sess.commit()
+        if not from_card:
+            user.money -= sm
+        db_sess.commit()
+        return render_template('completed_payment.html')
+    except Exception:
+        return redirect(url_for('basket'))
+
+
+@app.route('/basket/buy', methods=['GET', 'POST'])
+@login_required
+def basket_buy():
+    try:
+        db_sess = db_session.create_session()
+        basket = db_sess.query(Basket).filter(Basket.user_id == current_user.id).first()
+        form = CardForm()
+        if form.validate_on_submit():
+            return basket_complete(from_card=True)
+        return render_template('buy.html', basket=basket, form=form)
+    except Exception:
+        return redirect(url_for('basket'))
 
 
 @app.route('/basket_delete/<int:id>', methods=['GET', 'POST'])
