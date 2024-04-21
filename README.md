@@ -1,23 +1,21 @@
-# Coders Share ![last commit](https://img.shields.io/github/last-commit/Tanax-Xt/coders-share) ![license](https://img.shields.io/github/license/Tanax-Xt/coders-share)
+# Coders Share 
+![last commit](https://img.shields.io/github/last-commit/Tanax-Xt/coders-share) ![license](https://img.shields.io/github/license/Tanax-Xt/coders-share)
 
 Coders Share – это онлайн-площадка для покупки и продажи проектов и их частей
 
 
 Содержание
   <ol>
-    <li><a href="#key-features">Ключевые возможность</a></li>
-    <li><a href="#getting-started">Начало работы</a></li>
-    <li><a href="#api">Работа с API</a></li>
+    <li><a href="#ключевые-возможности">Ключевые возможность</a></li>
+    <li><a href="#начало-работы">Начало работы</a></li>
+    <li><a href="#работа-с-API">Работа с API</a></li>
   </ol>
 
 
-
-
-## Ключевые возможность
+## Ключевые возможности
 * Размещение собственных проектов на продажу
 * Приобретение чужих проектов
 * Работа с API
-
 
 
 ## Начало работы
