@@ -5,12 +5,22 @@
     <br>
     <h1>Страница для разработчиков</h1>
     <h3>Получите API-ключ здесь</h3>
-
-    <form action="" method="post">
-        <p>{{ form.submit(type="submit", class="btn btn-primary margin_button-top") }}</p>
-    </form>
-    {% if api_key != None %}
-        <p>Ваш API-ключ: {{ api_key }}</p>
+    {% if current_user.is_authenticated %}
+        <form action="" method="post">
+            <p>{{ form.submit(type="submit", class="btn btn-primary margin_button-top") }}</p>
+        </form>
+        {% if api_key != None %}
+            <p>Ваш API-ключ: {{ api_key }}</p>
+        {% endif %}
+    {% else %}
+        <br>
+        <div class="jumbotron">
+            <h1 class="display-4">Требуется авторизация</h1>
+            <p class="lead">Для начала работы авторизуйтесь, пожалуйста</p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="/login" role="button">Войти</a>
+            </p>
+        </div>
     {% endif %}
     <br>
 {% endblock %}

@@ -1,6 +1,6 @@
 import flask
-from flask import render_template
-from flask_login import login_required
+from flask import render_template, redirect, url_for
+from flask_login import login_required, current_user
 
 from api.generate_api_key import get_api_key
 from forms.developerform import DeveloperForm
@@ -13,10 +13,14 @@ blueprint = flask.Blueprint(
 
 
 @blueprint.route('/developer', methods=['GET', 'POST'])
-@login_required
 def developer():
-    form = DeveloperForm()
-    if form.is_submitted():
-        api_key = get_api_key()
-        return render_template('developer.html', form=form, api_key=api_key)
-    return render_template('developer.html', form=form)
+    try:
+        if current_user.is_authenticated:
+            form = DeveloperForm()
+            if form.is_submitted():
+                api_key = get_api_key()
+                return render_template('developer.html', form=form, api_key=api_key)
+            return render_template('developer.html', form=form)
+        return render_template('developer.html')
+    except Exception:
+        return redirect(url_for('developer.developer'))

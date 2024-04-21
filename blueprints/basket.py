@@ -78,13 +78,16 @@ def basket_complete(from_card=False):
         user = db_sess.query(User).filter(User.id == current_user.id).first()
         sm = 0
         for proj in basket.projects:
+            owner = db_sess.query(User).filter(User.id == proj.user_id).first()
+            owner.money += proj.price
+            db_sess.commit()
             user.bought_projects.append(proj)
             basket.projects.remove(proj)
             sm += proj.price
         db_sess.commit()
         if not from_card:
             user.money -= sm
-        db_sess.commit()
+            db_sess.commit()
         return render_template('completed_payment.html')
     except Exception:
         return redirect(url_for('basket.basket'))
