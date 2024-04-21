@@ -35,8 +35,8 @@ pip install -r requirements.txt
 Создайте `.env` файл в корневой директории и создайте следующие переменные окружения:
 ```dotenv
 SECRET_KEY="SECRET_KEY"
-HOST="host"
-PORT="port"
+HOST="HOST"
+PORT="PORT"
 ```
 
 
