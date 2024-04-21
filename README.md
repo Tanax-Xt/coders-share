@@ -32,11 +32,16 @@ git clone https://github.com/Tanax-Xt/coders-share.git
 pip install -r requirements.txt
 ```
 
-Создайте `.env` файл в корневой директории и создайте следующие переменные окружения:
+Создайте `.env` файл в корневой директории и создайте следующие переменные окружения (`HOST` и `PORT` можете поменять на свои):
 ```dotenv
-SECRET_KEY="SECRET_KEY"
-HOST="HOST"
-PORT="PORT"
+SECRET_KEY="YOUR_SECRET_KEY"
+HOST=localhost
+PORT=8080
+```
+
+Запустите `app.py`:
+```sh
+python app.py
 ```
 
 
