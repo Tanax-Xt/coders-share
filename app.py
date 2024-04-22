@@ -5,7 +5,7 @@ from flask import Flask, make_response, jsonify
 from flask_login import LoginManager
 from flask_restful import Api
 
-from api import languages_resource
+from api.resources import languages_resource, users_resource, projects_resource
 from blueprints import basket, register_login_logout, account, projects, main, developer, uploads
 from data import db_session
 from data.users import User
@@ -64,8 +64,10 @@ if __name__ == '__main__':
     app.register_blueprint(uploads.blueprint)
 
     api.add_resource(languages_resource.LanguagesListResource, '/api/<api_key>/languages')
-    api.add_resource(languages_resource.LanguagesResource, '/api/<api_key>/languages/<int:language_id>')
-    # добавить апи для пользователей
-    # добавить апи для projects
+    api.add_resource(languages_resource.LanguagesResource, '/api/<api_key>/languages/<int:id>')
+    api.add_resource(users_resource.UsersListResource, '/api/<api_key>/users')
+    api.add_resource(users_resource.UsersResource, '/api/<api_key>/users/<int:id>')
+    api.add_resource(projects_resource.ProjectsListResource, '/api/<api_key>/projects')
+    api.add_resource(projects_resource.ProjectsResource, '/api/<api_key>/projects/<int:id>')
 
     app.run(host, port)

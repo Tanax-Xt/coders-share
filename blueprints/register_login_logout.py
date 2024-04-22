@@ -32,7 +32,7 @@ def register():
                                    message="Пользователь с таким email уже зарегистрирован")
         user = User(
             name=form.name.data,
-            email=form.email.data,
+            email=form.email.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)

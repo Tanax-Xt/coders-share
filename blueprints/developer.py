@@ -1,6 +1,6 @@
 import flask
 from flask import render_template, redirect, url_for
-from flask_login import login_required, current_user
+from flask_login import current_user
 
 from api.generate_api_key import get_api_key
 from forms.developerform import DeveloperForm

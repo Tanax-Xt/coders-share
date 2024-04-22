@@ -5,7 +5,6 @@ from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
 
 
-
 class Basket(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'basket'
 
@@ -17,5 +16,5 @@ class Basket(SqlAlchemyBase, SerializerMixin):
     user = orm.relationship("User", back_populates='basket')
 
     projects = orm.relationship("Project",
-                               secondary="basket_to_projects",
-                               backref="basket")
+                                secondary="basket_to_projects",
+                                backref="basket")

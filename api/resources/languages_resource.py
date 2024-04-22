@@ -4,32 +4,43 @@ from flask_restful import abort, Resource
 from data import db_session
 from data.api_keys import ApiKey
 from data.languages import Language
-from .parsers.languages_parser import parser_not_all_parameters, parser_all_parameters
+from api.parsers.languages_parser import parser_not_all_parameters, parser_all_parameters
 
 
 class LanguagesResource(Resource):
-    def get(self, api_key, language_id):
+    def get(self, api_key, id):
         abort_if_api_key_not_found(api_key)
-        abort_if_language_not_found(language_id)
+        abort_if_language_not_found(id)
         session = db_session.create_session()
-        language = session.query(Language).get(language_id)
+        language = session.query(Language).get(id)
         return jsonify({'languages': language.to_dict(only=('id', 'language_title', 'language_sign', 'added_date'))})
 
-    def delete(self, api_key, language_id):
+    def delete(self, api_key, id):
         abort_if_api_key_not_found(api_key)
-        abort_if_language_not_found(language_id)
+        abort_if_language_not_found(id)
         session = db_session.create_session()
-        language = session.query(Language).get(language_id)
+        language = session.query(Language).get(id)
         session.delete(language)
         session.commit()
         return jsonify({'success': 'OK'})
 
-    def put(self, api_key, language_id):
+    def put(self, api_key, id):
         abort_if_api_key_not_found(api_key)
-        abort_if_language_not_found(language_id)
+        abort_if_language_not_found(id)
         args = parser_not_all_parameters.parse_args()
         session = db_session.create_session()
-        language = session.query(Language).get(language_id)
+        language = session.query(Language).get(id)
+        for key in args.keys():
+            setattr(language, key, args[key])
+        session.commit()
+        return jsonify({'success': 'OK'})
+
+    def patch(self, api_key, id):
+        abort_if_api_key_not_found(api_key)
+        abort_if_language_not_found(id)
+        args = parser_not_all_parameters.parse_args()
+        session = db_session.create_session()
+        language = session.query(Language).get(id)
         for key in filter(lambda x: args[x] is not None, args.keys()):
             setattr(language, key, args[key])
         session.commit()
@@ -64,8 +75,8 @@ def abort_if_api_key_not_found(api_key):
         abort(403, message=f"Api key {api_key} not found")
 
 
-def abort_if_language_not_found(language_id):
+def abort_if_language_not_found(id):
     session = db_session.create_session()
-    language = session.query(Language).get(language_id)
+    language = session.query(Language).get(id)
     if not language:
-        abort(404, message=f"Language {language_id} not found")
+        abort(404, message=f"Language {id} not found")

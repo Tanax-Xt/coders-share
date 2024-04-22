@@ -44,5 +44,3 @@ class Project(SqlAlchemyBase, SerializerMixin, UserMixin):
 
     user = orm.relationship('User')
     language = orm.relationship('Language')
-
-
