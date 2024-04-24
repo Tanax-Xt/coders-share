@@ -8,32 +8,22 @@ from data.users import User
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
 
-blueprint = flask.Blueprint(
-    'register_login_logout',
-    __name__,
-    template_folder='templates'
-)
+blueprint = flask.Blueprint("register_login_logout", __name__, template_folder="templates")
 
 
-@blueprint.route('/register', methods=['GET', 'POST'])
+# регистрация пользователя
+@blueprint.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('projects.projects_list'))
+        return redirect(url_for("projects.projects_list"))
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('register.html',
-                                   form=form,
-                                   message="Пароли не совпадают")
+            return render_template("register.html", form=form, message="Пароли не совпадают")
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
-            return render_template('register.html',
-                                   form=form,
-                                   message="Пользователь с таким email уже зарегистрирован")
-        user = User(
-            name=form.name.data,
-            email=form.email.data
-        )
+            return render_template("register.html", form=form, message="Пользователь с таким email уже зарегистрирован")
+        user = User(name=form.name.data, email=form.email.data)
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
@@ -43,30 +33,36 @@ def register():
         db_sess.merge(user)
         db_sess.commit()
         login_user(user, remember=False)
-        return redirect(url_for('projects.projects_list'))
-    return render_template('register.html', form=form)
+        return redirect(url_for("projects.projects_list"))
+    return render_template("register.html", form=form)
 
 
-@blueprint.route('/login', methods=['GET', 'POST'])
+# логин пользователя
+@blueprint.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('projects.projects_list'))
+        return redirect(url_for("projects.projects_list"))
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if not user:
-            return render_template('login.html', message='Пользователь с такой почтой не зарегистрирован', form=form)
+            return render_template(
+                "login.html",
+                message="Пользователь с такой почтой не зарегистрирован",
+                form=form
+            )
         if not user.check_password(form.password.data):
-            return render_template('login.html', message='Пароль неверный', form=form)
+            return render_template("login.html", message="Пароль неверный", form=form)
         else:
             login_user(user, remember=form.remember_me.data)
-            return redirect(url_for('projects.projects_list'))
-    return render_template('login.html', form=form)
+            return redirect(url_for("projects.projects_list"))
+    return render_template("login.html", form=form)
 
 
-@blueprint.route('/logout')
+# логаут пользователя
+@blueprint.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect('/login')
+    return redirect("/login")

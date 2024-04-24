@@ -13,8 +13,22 @@ class ProjectsResource(Resource):
         abort_if_project_not_found(id)
         session = db_session.create_session()
         projects = session.query(Project).get(id)
-        return jsonify({'projects': projects.to_dict(
-            only=('id', 'title', 'about', 'language_id', 'user_id', 'price', 'is_visible', 'added_date'))})
+        return jsonify(
+            {
+                "projects": projects.to_dict(
+                    only=(
+                        "id",
+                        "title",
+                        "about",
+                        "language_id",
+                        "user_id",
+                        "price",
+                        "is_visible",
+                        "added_date",
+                    )
+                )
+            }
+        )
 
     def delete(self, api_key, id):
         abort_if_api_key_not_found(api_key)
@@ -23,7 +37,7 @@ class ProjectsResource(Resource):
         project = session.query(Project).get(id)
         project.is_visible = False
         session.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({"success": "OK"})
 
     def put(self, api_key, id):
         abort_if_api_key_not_found(api_key)
@@ -34,7 +48,7 @@ class ProjectsResource(Resource):
         for key in args.keys():
             setattr(project, key, args[key])
         session.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({"success": "OK"})
 
     def patch(self, api_key, id):
         abort_if_api_key_not_found(api_key)
@@ -45,7 +59,7 @@ class ProjectsResource(Resource):
         for key in filter(lambda x: args[x] is not None, args.keys()):
             setattr(project, key, args[key])
         session.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({"success": "OK"})
 
 
 class ProjectsListResource(Resource):
@@ -53,13 +67,29 @@ class ProjectsListResource(Resource):
         abort_if_api_key_not_found(api_key)
         session = db_session.create_session()
         users = session.query(Project).all()
-        return jsonify({'projects': [
-            item.to_dict(only=('id', 'title', 'about', 'language_id', 'user_id', 'price', 'is_visible', 'added_date'))
-            for item in users]})
+        return jsonify(
+            {
+                "projects": [
+                    item.to_dict(
+                        only=(
+                            "id",
+                            "title",
+                            "about",
+                            "language_id",
+                            "user_id",
+                            "price",
+                            "is_visible",
+                            "added_date",
+                        )
+                    )
+                    for item in users
+                ]
+            }
+        )
 
     def post(self, api_key):
         # добавление проектов только через интерфейс
-        abort(405, message='Method Not Allowed')
+        abort(405, message="Method Not Allowed")
 
 
 def abort_if_api_key_not_found(api_key):

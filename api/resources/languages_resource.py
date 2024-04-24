@@ -4,7 +4,10 @@ from flask_restful import abort, Resource
 from data import db_session
 from data.api_keys import ApiKey
 from data.languages import Language
-from api.parsers.languages_parser import parser_not_all_parameters, parser_all_parameters
+from api.parsers.languages_parser import (
+    parser_not_all_parameters,
+    parser_all_parameters,
+)
 
 
 class LanguagesResource(Resource):
@@ -13,7 +16,13 @@ class LanguagesResource(Resource):
         abort_if_language_not_found(id)
         session = db_session.create_session()
         language = session.query(Language).get(id)
-        return jsonify({'languages': language.to_dict(only=('id', 'language_title', 'language_sign', 'added_date'))})
+        return jsonify(
+            {
+                "languages": language.to_dict(
+                    only=("id", "language_title", "language_sign", "added_date")
+                )
+            }
+        )
 
     def delete(self, api_key, id):
         abort_if_api_key_not_found(api_key)
@@ -22,7 +31,7 @@ class LanguagesResource(Resource):
         language = session.query(Language).get(id)
         session.delete(language)
         session.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({"success": "OK"})
 
     def put(self, api_key, id):
         abort_if_api_key_not_found(api_key)
@@ -33,7 +42,7 @@ class LanguagesResource(Resource):
         for key in args.keys():
             setattr(language, key, args[key])
         session.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({"success": "OK"})
 
     def patch(self, api_key, id):
         abort_if_api_key_not_found(api_key)
@@ -44,7 +53,7 @@ class LanguagesResource(Resource):
         for key in filter(lambda x: args[x] is not None, args.keys()):
             setattr(language, key, args[key])
         session.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({"success": "OK"})
 
 
 class LanguagesListResource(Resource):
@@ -52,20 +61,28 @@ class LanguagesListResource(Resource):
         abort_if_api_key_not_found(api_key)
         session = db_session.create_session()
         languages = session.query(Language).all()
-        return jsonify({'languages': [item.to_dict(only=('id', 'language_title', 'language_sign', 'added_date')) for
-                                      item in languages]})
+        return jsonify(
+            {
+                "languages": [
+                    item.to_dict(
+                        only=("id", "language_title", "language_sign", "added_date")
+                    )
+                    for item in languages
+                ]
+            }
+        )
 
     def post(self, api_key):
         abort_if_api_key_not_found(api_key)
         args = parser_all_parameters.parse_args()
         session = db_session.create_session()
         language = Language(
-            language_title=args['language_title'],
-            language_sign=args['language_sign'],
+            language_title=args["language_title"],
+            language_sign=args["language_sign"],
         )
         session.add(language)
         session.commit()
-        return jsonify({'id': language.id})
+        return jsonify({"id": language.id})
 
 
 def abort_if_api_key_not_found(api_key):

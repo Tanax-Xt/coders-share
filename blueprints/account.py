@@ -8,25 +8,25 @@ from data.users import User
 from forms.replenishmentform import ReplenishmentForm
 from forms.withdrawalform import WithdrawalForm
 
-blueprint = flask.Blueprint(
-    'account',
-    __name__,
-    template_folder='templates'
-)
+blueprint = flask.Blueprint("account", __name__, template_folder="templates")
 
 
-@blueprint.route('/account', methods=['GET', 'POST'])
+# личный кабинет, главная страница
+@blueprint.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
     try:
         db_sess = db_session.create_session()
-        owner_projects = db_sess.query(Project).filter(Project.user == current_user).all()
-        return render_template('account.html', owner_projects=owner_projects)
+        owner_projects = (
+            db_sess.query(Project).filter(Project.user == current_user).all()
+        )
+        return render_template("account.html", owner_projects=owner_projects)
     except Exception:
-        return redirect(url_for('account.account'))
+        return redirect(url_for("account.account"))
 
 
-@blueprint.route('/account/replenishment', methods=['GET', 'POST'])
+# личный кабинет, пополнение счета
+@blueprint.route("/account/replenishment", methods=["GET", "POST"])
 @login_required
 def account_replenishment():
     form = ReplenishmentForm()
@@ -35,11 +35,12 @@ def account_replenishment():
         user = db_sess.query(User).filter(User.id == current_user.id).first()
         user.money += form.sum.data
         db_sess.commit()
-        return redirect(url_for('account.account'))
-    return render_template('replenishment.html', form=form)
+        return redirect(url_for("account.account"))
+    return render_template("replenishment.html", form=form)
 
 
-@blueprint.route('/account/withdrawal', methods=['GET', 'POST'])
+# личный кабинет, вывод средств
+@blueprint.route("/account/withdrawal", methods=["GET", "POST"])
 @login_required
 def account_withdrawal():
     form = WithdrawalForm()
@@ -48,5 +49,5 @@ def account_withdrawal():
         user = db_sess.query(User).filter(User.id == current_user.id).first()
         user.money = 0
         db_sess.commit()
-        return redirect(url_for('account.account'))
-    return render_template('withdrawal.html', form=form)
+        return redirect(url_for("account.account"))
+    return render_template("withdrawal.html", form=form)

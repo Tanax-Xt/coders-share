@@ -7,6 +7,6 @@ Flask-RESTful==0.3.10
 alembic==1.13.1
 python-dotenv==1.0.1
 Flask-WTF==1.2.1
-flask_login
-sqlalchemy_file
-flask_uploads
+Flask-Login==0.6.3
+sqlalchemy-file==0.6.0
+Flask-Uploads==0.2.1
