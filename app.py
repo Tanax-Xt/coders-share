@@ -9,7 +9,7 @@ from waitress import serve
 from api.resources import languages_resource, users_resource, projects_resource
 from blueprints import (
     basket,
-    register_login_logout,
+    auth,
     account,
     projects,
     main,
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     db_session.global_init("db/coders_share_database.db")
 
     app.register_blueprint(basket.blueprint)
-    app.register_blueprint(register_login_logout.blueprint)
+    app.register_blueprint(auth.blueprint)
     app.register_blueprint(account.blueprint)
     app.register_blueprint(projects.blueprint)
     app.register_blueprint(main.blueprint)
