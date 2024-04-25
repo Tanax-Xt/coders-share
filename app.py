@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, make_response, jsonify
 from flask_login import LoginManager
 from flask_restful import Api
+from waitress import serve
 
 from api.resources import languages_resource, users_resource, projects_resource
 from blueprints import (
@@ -79,4 +80,5 @@ if __name__ == "__main__":
     api.add_resource(projects_resource.ProjectsListResource, "/api/<api_key>/projects")
     api.add_resource(projects_resource.ProjectsResource, "/api/<api_key>/projects/<int:id>")
 
-    app.run(host, port)
+    # app.run(host, port)
+    serve(app, host=host, port=port)
